@@ -1,6 +1,6 @@
 const Post = require("../models/post");
 const handleSuccess = require("../services/handleSuccess");
-const handleError = require("../services/handleError");
+const appError = require("../services/appError");
 
 const posts = {
   async getPosts(req, res) {
@@ -15,30 +15,25 @@ const posts = {
       .sort(timeSort);
     handleSuccess({ req, res, data: postData });
   },
-  async addPost(req, res) {
-    const { user, article, image } = req.body;
-    try {
-      const postData = await Post.create({
-        user,
-        article,
-        image,
-      });
-      handleSuccess({ req, res, data: postData });
-    } catch (err) {
-      handleError({ res, err });
+  async addPost(req, res, next) {
+    if (req.body.content === undefined) {
+      return next(appError(400, "你沒有填寫 content 資料", next));
     }
+    const { user, article, image } = req.body;
+    const postData = await Post.create({
+      user,
+      article,
+      image,
+    });
+    handleSuccess({ req, res, data: postData });
   },
   async deleteAllPosts(req, res) {
     const postData = await Post.deleteMany({});
     handleSuccess({ req, res, data: postData });
   },
   async deletePost(req, res) {
-    try {
-      const postData = await Post.findByIdAndDelete(req.params.id);
-      handleSuccess({ req, res, data: postData });
-    } catch (err) {
-      handleError({ res, err });
-    }
+    const postData = await Post.findByIdAndDelete(req.params.id);
+    handleSuccess({ req, res, data: postData });
   },
 };
 
