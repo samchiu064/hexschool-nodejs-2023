@@ -16,8 +16,8 @@ const posts = {
     handleSuccess({ req, res, data: postData });
   },
   async addPost(req, res, next) {
-    if (req.body.content === undefined) {
-      return next(appError(400, "你沒有填寫 content 資料", next));
+    if (req.body === undefined) {
+      return next(appError(400, "你沒有填寫資料", next));
     }
     const { user, article, image } = req.body;
     const postData = await Post.create({

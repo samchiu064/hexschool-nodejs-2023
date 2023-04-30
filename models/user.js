@@ -19,6 +19,16 @@ const userSchema = new Schema(
       type: String,
       default: "https://i.pravatar.cc/300",
     },
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Other"],
+    },
+    password: {
+      type: String,
+      select: false,
+      minLength: [8, "密碼長度不得小於 8 個字元"],
+      required: [true, "密碼為必填"],
+    },
   },
   { versionKey: false, timestamps: { createdAt: true, updatedAt: false } }
 );
