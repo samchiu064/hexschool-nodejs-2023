@@ -38,10 +38,10 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   err.statusCode === err.statusCode || 500;
   if (process.env.NODE_ENV === "dev") {
-    resErrorDev({ res, err });
+    return resErrorDev({ res, err });
   }
   if (process.env.NODE_ENV === "prod") {
-    resErrorProd({ res, err });
+    return resErrorProd({ res, err });
   }
   res.status(500).send({
     status: false,
